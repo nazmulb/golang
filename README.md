@@ -73,7 +73,7 @@ The src subdirectory typically contains multiple version control repositories (s
 
 To give you an idea of how a workspace looks in practice, here's an example:
 
-```js
+```
 bin/
     hello                          # command executable
 pkg/
