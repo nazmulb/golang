@@ -98,7 +98,7 @@ src/
     ... (many more repositories and packages omitted) ...
 ```
 
-The tree above shows a workspace containing two repositories (example and image). The example repository contains two commands (hello and outyet) and one library (stringutil). The image repository contains the bmp package and several others.
+The tree above shows a workspace containing two repositories (example and image). The example repository contains one command (hello) and one library (nazmulpkg). The image repository contains the bmp package and several others.
 
 A typical workspace contains many source repositories containing many packages and commands. Most Go programmers keep all their Go source code and dependencies in a single workspace.
 
