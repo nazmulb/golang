@@ -77,7 +77,7 @@ To give you an idea of how a workspace looks in practice, here's an example:
 bin/
     hello                          # command executable
 pkg/
-    darwin_amd64/
+    darwin_amd64/                  # this will reflect your OS and architecture
         github.com/nazmulb/golang/learning/
             nazmulpkg.a            # package object
 src/
@@ -106,29 +106,29 @@ A typical workspace contains many source repositories containing many packages a
 The `GOPATH` environment variable specifies the location of your workspace. It defaults to a directory named go inside your home directory.
 
 The command `go env GOPATH` prints the effective current `GOPATH`:
-```js
+```
 go env GOPATH
 /Users/nazmulbasher/go
 ```
 
 Edit your `~/.zshrc` file:
-```js
+```
 vim ~/.zshrc
 ```
 
 Add the following line to change the `GOPATH` to your workspace:
-```js
+```
 export GOPATH=/Volumes/MyComputer/projects/golang
 ```
 
 For convenience, add the workspace's `bin` subdirectory to your `PATH` as well:
-```js
+```
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 Now save and quit `~/.zshrc` file using vim and source the change from it:
 
-```js
+```
 source ~/.zshrc
 ```
 
@@ -136,7 +136,7 @@ source ~/.zshrc
 
 To compile and run a simple program, first choose a package path (we'll use github.com/nazmulb/golang/learning/hello) and create a corresponding package directory inside your workspace:
 
-```js
+```
 mkdir $GOPATH/src/github.com/nazmulb/golang/learning/hello
 ```
 
@@ -162,7 +162,7 @@ Note that you can run this command from anywhere on your system. The go tool fin
 
 You can also omit the package path if you run `go install` from the package directory:
 
-```js
+```
 cd $GOPATH/src/github.com/nazmulb/golang/learning/hello
 go install
 ```
@@ -173,14 +173,101 @@ The go tool will only print output when an error occurs, so if these commands pr
 
 You can now run the program by typing its full path at the command line:
 
-```js
+```
 $GOPATH/bin/hello
 Hello, world.
 ```
 
 Or, as you have added `$GOPATH/bin` to your PATH, just type the binary name:
 
-```js
+```
 hello
 Hello, world.
 ```
+
+## Your first library
+Let's write a library and use it from the hello program.
+
+Again, the first step is to choose a package path (we'll use `github.com/nazmulb/golang/learning/nazmulpkg`) and create the package directory:
+
+```
+mkdir $GOPATH/src/github.com/nazmulb/golang/learning/nazmulpkg
+```
+
+Next, create a file named `show.go` in that directory with the following contents.
+
+```go
+package nazmulpkg
+
+func Show(s string) string {
+	return s+" Nazmul Basher"
+}
+```
+
+Now, test that the package compiles with go build:
+
+```
+go build github.com/nazmulb/golang/learning/nazmulpkg
+```
+
+Or, if you are working in the package's source directory, just:
+
+```
+go build
+```
+
+This won't produce an output file. To do that, you must use `go install`, which places the package object inside the pkg directory of the workspace.
+
+After confirming that the `nazmulpkg` package builds, modify your original `hello.go` (which is in `$GOPATH/src/github.com/nazmulb/golang/learning/hello`) to use it:
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/nazmulb/golang/learning/nazmulpkg"
+)
+
+func main() {
+	fmt.Printf(nazmulpkg.Show("Hello"))
+}
+```
+
+Whenever the go tool installs a package or binary, it also installs whatever dependencies it has. So when you install the hello program
+
+```
+go install ggithub.com/nazmulb/golang/learning/hello
+```
+
+the `nazmulpkg` package will be installed as well, automatically.
+
+Running the new version of the program, you should see the following as output:
+
+```
+hello
+Hello Nazmul Basher
+```
+After the steps above, your workspace should look like this:
+
+
+```
+bin/
+    hello                          # command executable
+pkg/
+    darwin_amd64/                  # this will reflect your OS and architecture
+        github.com/nazmulb/golang/learning/
+            nazmulpkg.a            # package object
+src/
+    github.com/nazmulb/golang/
+        .git/                      # Git repository metadata
+        learning/
+            hello/
+                hello.go           # command source
+            nazmulpkg/
+                show.go            # package source
+        README.md
+```
+
+Note that `go install` placed the `nazmulpkg.a` object in a directory inside `pkg/darwin_amd64` that mirrors its source directory. This is so that future invocations of the go tool can find the package object and avoid recompiling the package unnecessarily. The `darwin_amd64` part is there to aid in cross-compilation, and will reflect the operating system and architecture of your system.
+
+Go command executables are statically linked; the package objects need not be present to run Go programs.
