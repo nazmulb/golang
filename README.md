@@ -16,7 +16,7 @@ func main() {
 ```
 
 ## Features of Go Programming
-The most important features of Go programming are listed below −
+The most important features of Go programming are listed below:
 
 - Support for environment adopting patterns similar to dynamic languages. For example, type inference (x := 0 is valid declaration of a variable x of type int)
 
@@ -31,7 +31,7 @@ The most important features of Go programming are listed below −
 - Production of statically linked native binaries without external dependencies.
 
 ## Features Excluded Intentionally
-To keep the language simple and concise, the following features commonly available in other similar languages are omitted in Go −
+To keep the language simple and concise, the following features commonly available in other similar languages are omitted in Go:
 
 - Support for type inheritance
 
@@ -69,7 +69,7 @@ A workspace is a directory hierarchy with three directories at its root:
 
 The go tool builds source packages and installs the resulting binaries to the `pkg` and `bin` directories.
 
-The src subdirectory typically contains multiple version control repositories (such as for Git or Mercurial) that track the development of one or more source packages.
+The `src` subdirectory typically contains multiple version control repositories (such as for Git or Mercurial) that track the development of one or more source packages.
 
 To give you an idea of how a workspace looks in practice, here's an example:
 
@@ -98,7 +98,7 @@ src/
     ... (many more repositories and packages omitted) ...
 ```
 
-The tree above shows a workspace containing two repositories (example and image). The example repository contains one command (hello) and one library (nazmulpkg). The image repository contains the bmp package and several others.
+The tree above shows a workspace containing two repositories (golang and image). The golang repository contains one command (hello) and one library (nazmulpkg). The image repository contains the bmp package and several others.
 
 A typical workspace contains many source repositories containing many packages and commands. Most Go programmers keep all their Go source code and dependencies in a single workspace.
 
@@ -148,7 +148,7 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Printf("Hello, world.\n")
+	fmt.Printf("Hello, world.")
 }
 ```
 
@@ -229,14 +229,14 @@ import (
 )
 
 func main() {
-	fmt.Printf(nazmulpkg.Show("Hello"))
+	fmt.Printf(nazmulpkg.Show("Hello,"))
 }
 ```
 
 Whenever the go tool installs a package or binary, it also installs whatever dependencies it has. So when you install the hello program
 
 ```
-go install ggithub.com/nazmulb/golang/learning/hello
+go install github.com/nazmulb/golang/learning/hello
 ```
 
 the `nazmulpkg` package will be installed as well, automatically.
