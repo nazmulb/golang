@@ -16,6 +16,26 @@ func main() {
 	fmt.Printf("i: %d, j: %d\n", i, j)	
 	
 	fmt.Println(add(x, y))
+
+	getName := func(str string) string {
+		return str
+	}
+
+	fmt.Println(getName("Nazmul"))
+
+	nextNumber := getSequence()
+	fmt.Println(nextNumber())
+	fmt.Println(nextNumber())
+	
+	add := func(a, b int) int {
+		return a + b	
+	}
+	
+	fmt.Println(calculator(add))
+	
+	fmt.Println(calculator(func(a, b int) int {
+		return b-a
+	}))
 }
 
 func swap(a, b int) (int, int) {
@@ -31,4 +51,19 @@ func swapByRef(a *int, b *int) {
 
 func add(a int, b int) int {
 	return a+b
+}
+
+func getSequence() func() int {
+	i := 0
+	return func() int {
+		i += 1
+		return i
+	}
+}
+
+func calculator(cb func(int, int) int) int {
+	a := 10
+	b := 20	
+	
+	return cb(a, b)
 }
