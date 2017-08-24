@@ -3,18 +3,31 @@ package main
 import "fmt"
 
 func main() {
-	var marks float32 = 40
+	var marks float32 = 85
+	var grade string
 
-	switch marks {
-		case 90: 
-			fmt.Println("Excellent")
-		case 80:
-			fmt.Println("Very Good")
-		case 60:
-			fmt.Println("Good")
-		case 40, 50:
-			fmt.Println("Not Bad")
+	switch {
+		case marks >= 90 && marks <= 100: 
+			grade = "A+"
+		case marks >= 80 && marks < 90:
+			grade = "A"
+		case marks >= 60 && marks < 80:
+			grade = "B+"
+		case marks >= 33 && marks < 60:
+			grade = "B"
 		default:
-			fmt.Println("Failed or Invalid input")
+			grade = "F"
+	}
+
+
+	switch grade {
+		case "A+":
+			fmt.Println("Excellent")
+		case "A":
+			fmt.Println("Very Good")
+		case "B+", "B":
+			fmt.Println("Good")
+		default:
+			fmt.Println("Failed or invalid")	
 	}
 }
