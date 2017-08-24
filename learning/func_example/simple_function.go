@@ -36,6 +36,18 @@ func main() {
 	fmt.Println(calculator(func(a, b int) int {
 		return b-a
 	}))
+	
+	sum(10, 30)
+	sum(1, 2, 3, 4)
+}
+
+func sum(nums ...int) {
+	total := 0
+	for _, num := range nums {
+		total += num
+	}
+
+	fmt.Println(total)
 }
 
 func swap(a, b int) (int, int) {
