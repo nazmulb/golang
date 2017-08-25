@@ -16,6 +16,7 @@ func main() {
 
 	var c []int = b[1:4]
 	fmt.Println(c)
+	fmt.Printf("length: %d, capacity %d\n", len(c), cap(c))
 
 	fmt.Println(d)
 
@@ -29,5 +30,21 @@ func main() {
 	}
 
 	fmt.Println(s)
+	
+	x := make([]int, 5)
+	fmt.Println(x)
+	
+	var y []int
 
+	y = append(y, 2, 3, 7)
+	fmt.Println(y)
+
+	y = append(y, 10)
+	fmt.Println(y)
+
+	var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+	for i, v := range pow {
+		fmt.Printf("%d = %d\n", i, v)
+	}
 }
