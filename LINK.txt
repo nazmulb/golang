@@ -2,3 +2,4 @@ https://golang.org/doc/
 https://tour.golang.org/list
 https://gobyexample.com/functions
 https://awesome-go.com/
+https://www.miek.nl/go/#concurrency
