@@ -27,4 +27,9 @@ func main() {
 	fmt.Printf("e is of type %T\n", e)
 	fmt.Printf("f is of type %T\n", f)
 	fmt.Printf("g is of type %T\n", g)
+
+	var input int
+	fmt.Scanf("%d", &input)
+	output := input * 2
+	fmt.Println(output)
 }
