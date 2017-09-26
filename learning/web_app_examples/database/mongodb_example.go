@@ -8,7 +8,7 @@ import (
 )
 
 type (
-	// User represents the structure of our resource
+	// User collection
 	User struct {
 		ID         bson.ObjectId `json:"id" bson:"_id"`
 		Username   string        `json:"username" bson:"username"`
