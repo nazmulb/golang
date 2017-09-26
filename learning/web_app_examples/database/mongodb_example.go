@@ -28,8 +28,15 @@ func main() {
 
 	c := session.DB("myapp").C("users")
 
+	user := &User{
+		ID:         bson.NewObjectId(),
+		Username:   "saiham",
+		Password:   "1234",
+		Profession: "Senior Software Engineer",
+	}
+
 	// Insert
-	err = c.Insert(&User{ID: bson.NewObjectId(), Username: "saiham", Password: "1234", Profession: "Senior Software Engineer"})
+	err = c.Insert(user)
 	checkErr(err)
 
 	// Query One by username
