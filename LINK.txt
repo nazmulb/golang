@@ -3,3 +3,7 @@ https://tour.golang.org/list
 https://gobyexample.com/functions
 https://awesome-go.com/
 https://www.miek.nl/go/#concurrency
+
+https://astaxie.gitbooks.io/build-web-application-with-golang/en/
+https://stevenwhite.com/building-a-rest-service-with-golang-3/
+http://goinbigdata.com/how-to-build-microservice-with-mongodb-in-golang/
