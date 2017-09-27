@@ -43,10 +43,11 @@ func getSession(r *http.Request) *sessions.Session {
 	return session
 }
 
-func destroySessionValue(r *http.Request) {
+func destroySessionValue(w http.ResponseWriter, r *http.Request, key interface{}) {
 	session := getSession(r)
-	delete(session.Values, "sessionId")
+	delete(session.Values, key)
 	session.Options.MaxAge = -1
+	session.Save(r, w)
 }
 
 func setSessionValue(w http.ResponseWriter, r *http.Request, key interface{}, value interface{}) {
@@ -65,7 +66,7 @@ func getSessionValue(w http.ResponseWriter, r *http.Request, key interface{}) in
 }
 
 func count(w http.ResponseWriter, r *http.Request) {
-	//destroySessionValue(r)
+	//destroySessionValue(w, r, "countnum")
 
 	ct := getSessionValue(w, r, "countnum")
 
@@ -79,6 +80,7 @@ func count(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 
 	t.Execute(w, getSessionValue(w, r, "countnum"))
+
 }
 
 func main() {
