@@ -1,0 +1,17 @@
+[
+    {
+      "provider_user_id": 25,
+      "provider_quality_score_rank": 19.923039451169817,
+      "provider_performance_score_rank": 21.17780272027273
+    },
+    {
+      "provider_user_id": 26,
+      "provider_quality_score_rank": 46.11989832121869,
+      "provider_performance_score_rank": 67.06608651863978
+    },
+    {
+      "provider_user_id": 27,
+      "provider_quality_score_rank": 96.9707407029073,
+      "provider_performance_score_rank": 83.65544703198174
+    }
+]
