@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -10,29 +11,15 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/nazmulb/golang/learning/web_app_examples/json/models"
+	"gopkg.in/mgo.v2/bson"
 )
 
-// Score of providers
-type Score struct {
-	ProviderUserID               int     `json:"provider_user_id"`
-	TypeOfWorkID                 string  `json:"type_of_work_id"`
-	ProviderScoreRank            float32 `json:"provider_score_rank"`
-	ProviderQualityScoreRank     float32 `json:"provider_quality_score_rank"`
-	ProviderPerformanceScoreRank float32 `json:"provider_performance_score_rank"`
-}
+var providers []models.Score
 
-func (s *Score) calculateScoreRank() {
-	s.ProviderScoreRank = (s.ProviderQualityScoreRank + s.ProviderPerformanceScoreRank) / 2
-}
-
-func (s *Score) setTypeOfWork(tow string) {
-	s.TypeOfWorkID = tow
-}
-
-var providers []Score
-
-func getProviders() ([]Score, error) {
-	if len(providers) == 0 {
+func getProviders(from string) ([]models.Score, error) {
+	if from != "db" {
 		file, _ := filepath.Abs("./providers.json")
 		list, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -40,6 +27,16 @@ func getProviders() ([]Score, error) {
 		}
 
 		err = json.Unmarshal(list, &providers)
+		if err != nil {
+			return nil, err
+		}
+
+	} else {
+		session := models.GetDB()
+		c := session.DB("myapp").C("scores")
+
+		// Query All
+		err := c.Find(bson.M{}).Sort("provider_user_id").All(&providers)
 		if err != nil {
 			return nil, err
 		}
@@ -51,13 +48,20 @@ func getProviders() ([]Score, error) {
 // ProviderScores can be calculated
 func ProviderScores(w http.ResponseWriter, req *http.Request) {
 	qs := req.URL.Query()
-	providers, err := getProviders()
+	from := "db"
+	if qs.Get("from") != "" {
+		from = qs.Get("from")
+	}
+
+	providers, err := getProviders(from)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 	}
 
-	var res []Score
+	fmt.Println(providers)
+
+	var res []models.Score
 	ids := []int{}
 	m := make(map[int]bool) // hash to ensure uniq keys
 	// Get all of the providers ids
@@ -76,8 +80,8 @@ func ProviderScores(w http.ResponseWriter, req *http.Request) {
 	for _, provider := range providers {
 		for _, id := range ids {
 			if id == provider.ProviderUserID {
-				provider.calculateScoreRank()
-				provider.TypeOfWorkID = qs.Get("type_of_work_id")
+				provider.CalculateScoreRank()
+				provider.SetTypeOfWork(qs.Get("type_of_work_id"))
 				res = append(res, provider)
 			}
 		}
@@ -89,7 +93,7 @@ func ProviderScores(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte(err.Error()))
 	}
 
-	var data []Score
+	var data []models.Score
 	err = json.Unmarshal([]byte(js), &data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
